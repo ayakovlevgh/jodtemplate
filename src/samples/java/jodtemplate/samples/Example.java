@@ -65,11 +65,13 @@ public final class Example {
         final PPTXDocument doc = new PPTXDocument(configuration);
         final Map<String, Object> context = new HashMap<>();
         context.put("model", model);
-        final InputStream template = new BufferedInputStream(
-                new FileInputStream("src/samples/resources/template.pptx"));
-        final OutputStream result = new BufferedOutputStream(
-                new FileOutputStream("target/result.pptx"));
-        doc.process(context, template, result);
+        try (
+                final InputStream template = new BufferedInputStream(
+                        new FileInputStream("src/samples/resources/template.pptx"));
+                final OutputStream result = new BufferedOutputStream(
+                        new FileOutputStream("target/result.pptx"))) {
+            doc.process(context, template, result);
+        }
     }
 
 }
