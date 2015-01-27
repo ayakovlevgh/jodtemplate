@@ -22,6 +22,19 @@ limitations under the License.
     <artifactId>jodtemplate</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
+    <developers>
+        <developer>
+            <id>ayakovlev</id>
+            <name>Andrey Yakovlev</name>
+            <email>yakovlev2a@gmail.com</email>
+            <organization>Noveo</organization>
+            <organizationUrl>http://noveogroup.com/</organizationUrl>
+            <roles>
+                <role>Java developer</role>
+            </roles>
+        </developer>
+    </developers>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
