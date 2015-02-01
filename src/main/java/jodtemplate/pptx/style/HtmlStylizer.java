@@ -86,7 +86,7 @@ public class HtmlStylizer implements Stylizer {
             }
         }
         if (LI_TAG.equals(element.tagName())) {
-            return createListElements(tags, elements, arPr, apPr, element);
+            return createListElements(tags, elements, apPr, element);
         }
         if (P_TAG.equals(element.tagName())) {
             return Arrays.asList(createParagraphElement(elements, apPr));
@@ -106,10 +106,10 @@ public class HtmlStylizer implements Stylizer {
         return ar;
     }
 
-    private List<Element> createListElements(final List<String> tags, final List<Element> elements, final Element arPr,
+    private List<Element> createListElements(final List<String> tags, final List<Element> elements,
             final Element apPr, final org.jsoup.nodes.Element element) {
         final Element ap = new Element(PPTXDocument.P_ELEMENT, getNamespace());
-        final Element apPrToAdd = applyListFormatting(tags, element, arPr, apPr);
+        final Element apPrToAdd = applyListFormatting(tags, element, apPr);
         ap.addContent(apPrToAdd);
         final List<Element> listResult = new ArrayList<>();
         listResult.add(ap);
@@ -124,9 +124,9 @@ public class HtmlStylizer implements Stylizer {
     }
 
     private Element applyListFormatting(final List<String> tags, final org.jsoup.nodes.Element element,
-            final Element arPr, final Element apPr) {
+            final Element apPr) {
         final Element apPrToAdd;
-        if (arPr == null) {
+        if (apPr == null) {
             apPrToAdd = new Element(PPTXDocument.PPR_ELEMENT, getNamespace());
         } else {
             apPrToAdd = apPr.clone();
