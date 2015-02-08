@@ -21,7 +21,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import jodtemplate.Relationship;
 import jodtemplate.TestUtils;
+import jodtemplate.pptx.Slide;
 import jodtemplate.pptx.style.HtmlStylizer;
 import jodtemplate.style.Stylizer;
 
@@ -34,7 +36,7 @@ public class HtmlStylizerTest {
 
     @Test
     public void testSimpleText() throws Exception {
-        final List<Element> result = stylizer.stylize("test text", null, null);
+        final List<Element> result = stylizer.stylize("test text", null, null, null);
         assertEquals(result.size(), 1);
         final String elementText = TestUtils.convertElementToText(result.get(0));
         assertEquals("<a:r xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">"
@@ -43,7 +45,7 @@ public class HtmlStylizerTest {
 
     @Test
     public void testBTag() throws Exception {
-        final List<Element> result = stylizer.stylize("<b>test text</b>", null, null);
+        final List<Element> result = stylizer.stylize("<b>test text</b>", null, null, null);
         assertEquals(result.size(), 1);
         final String elementText = TestUtils.convertElementToText(result.get(0));
         assertEquals("<a:r xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">"
@@ -52,7 +54,7 @@ public class HtmlStylizerTest {
 
     @Test
     public void testITag() throws Exception {
-        final List<Element> result = stylizer.stylize("<i>test text</i>", null, null);
+        final List<Element> result = stylizer.stylize("<i>test text</i>", null, null, null);
         assertEquals(result.size(), 1);
         final String elementText = TestUtils.convertElementToText(result.get(0));
         assertEquals("<a:r xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">"
@@ -61,7 +63,7 @@ public class HtmlStylizerTest {
 
     @Test
     public void testUTag() throws Exception {
-        final List<Element> result = stylizer.stylize("<u>test text</u>", null, null);
+        final List<Element> result = stylizer.stylize("<u>test text</u>", null, null, null);
         assertEquals(result.size(), 1);
         final String elementText = TestUtils.convertElementToText(result.get(0));
         assertEquals("<a:r xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">"
@@ -70,7 +72,7 @@ public class HtmlStylizerTest {
 
     @Test
     public void testStrongTag() throws Exception {
-        final List<Element> result = stylizer.stylize("<strong>test text</strong>", null, null);
+        final List<Element> result = stylizer.stylize("<strong>test text</strong>", null, null, null);
         assertEquals(result.size(), 1);
         final String elementText = TestUtils.convertElementToText(result.get(0));
         assertEquals("<a:r xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">"
@@ -79,7 +81,7 @@ public class HtmlStylizerTest {
 
     @Test
     public void testEmTag() throws Exception {
-        final List<Element> result = stylizer.stylize("<em>test text</em>", null, null);
+        final List<Element> result = stylizer.stylize("<em>test text</em>", null, null, null);
         assertEquals(result.size(), 1);
         final String elementText = TestUtils.convertElementToText(result.get(0));
         assertEquals("<a:r xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">"
@@ -88,7 +90,7 @@ public class HtmlStylizerTest {
 
     @Test
     public void testInsTag() throws Exception {
-        final List<Element> result = stylizer.stylize("<ins>test text</ins>", null, null);
+        final List<Element> result = stylizer.stylize("<ins>test text</ins>", null, null, null);
         assertEquals(result.size(), 1);
         final String elementText = TestUtils.convertElementToText(result.get(0));
         assertEquals("<a:r xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">"
@@ -97,7 +99,7 @@ public class HtmlStylizerTest {
 
     @Test
     public void testPTag() throws Exception {
-        final List<Element> result = stylizer.stylize("<p>test text</p>", null, null);
+        final List<Element> result = stylizer.stylize("<p>test text</p>", null, null, null);
         assertEquals(result.size(), 1);
         final String elementText = TestUtils.convertElementToText(result.get(0));
         assertEquals("<a:p xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">"
@@ -107,7 +109,7 @@ public class HtmlStylizerTest {
     @Test
     public void testUlTag() throws Exception {
         final List<Element> result = stylizer.stylize(
-                "<ul><li>item 1<ul><li>item 1.1</li></ul></li><li>item 2</li></ul>", null, null);
+                "<ul><li>item 1<ul><li>item 1.1</li></ul></li><li>item 2</li></ul>", null, null, null);
         assertEquals(result.size(), 3);
         final String elementText1 = TestUtils.convertElementToText(result.get(0));
         final String elementText2 = TestUtils.convertElementToText(result.get(1));
@@ -129,7 +131,7 @@ public class HtmlStylizerTest {
     @Test
     public void testOlTag() throws Exception {
         final List<Element> result = stylizer.stylize(
-                "<ol><li>item 1<ol><li>item 1.1</li></ol></li><li>item 2</li></ol>", null, null);
+                "<ol><li>item 1<ol><li>item 1.1</li></ol></li><li>item 2</li></ol>", null, null, null);
         assertEquals(result.size(), 3);
         final String elementText1 = TestUtils.convertElementToText(result.get(0));
         final String elementText2 = TestUtils.convertElementToText(result.get(1));
@@ -147,7 +149,7 @@ public class HtmlStylizerTest {
 
     @Test
     public void testBrTag() throws Exception {
-        final List<Element> result = stylizer.stylize("test <br />text", null, null);
+        final List<Element> result = stylizer.stylize("test <br />text", null, null, null);
         assertEquals(result.size(), 3);
         final String elementText1 = TestUtils.convertElementToText(result.get(0));
         final String elementText2 = TestUtils.convertElementToText(result.get(1));
@@ -157,5 +159,22 @@ public class HtmlStylizerTest {
         assertEquals("<a:br xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" />", elementText2);
         assertEquals("<a:r xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">"
                 + "<a:t>text</a:t></a:r>", elementText3);
+    }
+
+    @Test
+    public void testATag() throws Exception {
+        final Slide slide = new Slide();
+        final List<Element> result = stylizer.stylize("<a href=\"http://localhost\">hyperlink</a>", null, null, slide);
+        assertEquals(result.size(), 1);
+        final String elementText1 = TestUtils.convertElementToText(result.get(0));
+        assertEquals("<a:r xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">"
+                + "<a:rPr><a:hlinkClick xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" "
+                + "r:id=\"rId1\" /></a:rPr><a:t>hyperlink</a:t></a:r>", elementText1);
+        assertEquals(slide.getOtherRelationships().size(), 1);
+        final Relationship rel = slide.getOtherRelationships().get(0);
+        assertEquals(rel.getId(), "rId1");
+        assertEquals(rel.getTarget(), "http://localhost");
+        assertEquals(rel.getTargetMode(), Relationship.EXTERNAL_TARGET_MODE);
+        assertEquals(rel.getType(), Relationship.HYPERLINK_TYPE);
     }
 }

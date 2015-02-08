@@ -27,12 +27,11 @@ import java.util.List;
 
 import jodtemplate.TestUtils;
 import jodtemplate.pptx.Configuration;
-import jodtemplate.pptx.postprocessor.StylePostprocessor;
+import jodtemplate.pptx.Slide;
 import jodtemplate.style.Stylizer;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.Namespace;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,7 +61,8 @@ public class StylePostprocessorTest {
         stylized.add(TestUtils.createArElement("elem 2"));
         stylized.add(TestUtils.createApElement("elem 3"));
 
-        when(stylizer.stylize(anyString(), any(Element.class), any(Element.class))).thenReturn(stylized);
+        when(stylizer.stylize(anyString(), any(Element.class), any(Element.class), any(Slide.class)))
+                .thenReturn(stylized);
         when(configuration.getStylizer(STYLIZED_STRING_CLASS_NAME)).thenReturn(stylizer);
     }
 
@@ -76,7 +76,7 @@ public class StylePostprocessorTest {
                 + "<a:p><a:pPr indent=\"-285750\" marL=\"285750\"><a:buFont/><a:buChar/></a:pPr>"
                 + "<a:r><a:rPr b=\"1\" dirty=\"0\" err=\"1\" lang=\"en-US\" smtClean=\"0\"/>"
                 + "<a:t><!-- stylized " + STYLIZED_STRING_CLASS_NAME
-                + ": <p>text</p><b>text</b><p>text</p>--></a:t></a:r>"
+                + ": <p>elem 1</p><b>elem 2</b><p>elem 3</p>--></a:t></a:r>"
                 + "<a:r><a:t>text 1</a:t></a:r><a:endParaRPr dirty=\"0\" lang=\"en-US\" smtClean=\"0\"/></a:p>"
                 + "<a:p><a:r><a:t>text 2</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>";
         Document dom = TestUtils.createJDOMDocument(sourceXml);
@@ -93,61 +93,62 @@ public class StylePostprocessorTest {
                 + "<a:p><a:pPr indent=\"-285750\" marL=\"285750\"><a:buFont /><a:buChar /></a:pPr>"
                 + "<a:endParaRPr dirty=\"0\" lang=\"en-US\" smtClean=\"0\" /></a:p>"
                 + "<a:p><a:r><a:t>elem 1</a:t></a:r></a:p>"
-                + "<a:p><a:pPr indent=\"-285750\" marL=\"285750\" /><a:r><a:t>elem 2</a:t></a:r></a:p>"
+                + "<a:p><a:pPr indent=\"-285750\" marL=\"285750\"><a:buNone /></a:pPr>"
+                + "<a:r><a:t>elem 2</a:t></a:r></a:p>"
                 + "<a:p><a:r><a:t>elem 3</a:t></a:r></a:p>"
                 + "<a:p><a:pPr indent=\"-285750\" marL=\"285750\"><a:buFont /><a:buChar /></a:pPr>"
                 + "<a:r><a:t>text 1</a:t></a:r></a:p>"
                 + "<a:p><a:r><a:t>text 2</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>\n", result);
     }
 
-/*    @Test
-    public void testProcessExpressionArShouldBeDeleted() throws Exception {
-        final String sourceXml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
-                + "<p:sld xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" "
-                + "xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" "
-                + "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">"
-                + "<p:cSld><p:spTree><p:sp><p:txBody>"
-                + "<a:p><a:pPr indent=\"-285750\" marL=\"285750\"><a:buNone/></a:pPr>"
-                + "<a:r><a:rPr dirty=\"0\" lang=\"en-US\" smtClean=\"0\"/>"
-                + "<a:t><!-- stylized " + STYLIZED_STRING_CLASS_NAME
-                + ": <p><strong>text</strong></p><ul><li>item</li></ul--></a:t></a:r>"
-                + "<a:endParaRPr dirty=\"0\" lang=\"en-US\"/></a:p>"
-                + "</p:txBody></p:sp></p:spTree></p:cSld></p:sld>";
-        Document dom = TestUtils.createJDOMDocument(sourceXml);
+    /*    @Test
+        public void testProcessExpressionArShouldBeDeleted() throws Exception {
+            final String sourceXml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                    + "<p:sld xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" "
+                    + "xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" "
+                    + "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">"
+                    + "<p:cSld><p:spTree><p:sp><p:txBody>"
+                    + "<a:p><a:pPr indent=\"-285750\" marL=\"285750\"><a:buNone/></a:pPr>"
+                    + "<a:r><a:rPr dirty=\"0\" lang=\"en-US\" smtClean=\"0\"/>"
+                    + "<a:t><!-- stylized " + STYLIZED_STRING_CLASS_NAME
+                    + ": <p><strong>text</strong></p><ul><li>item</li></ul--></a:t></a:r>"
+                    + "<a:endParaRPr dirty=\"0\" lang=\"en-US\"/></a:p>"
+                    + "</p:txBody></p:sp></p:spTree></p:cSld></p:sld>";
+            Document dom = TestUtils.createJDOMDocument(sourceXml);
 
 
-        final Element at = new Element("t", getNamespace());
-        at.setText("text");
-        final Element ar = new Element("r", getNamespace());
-            ar.addContent(at);
-            return ar;
-        }
+            final Element at = new Element("t", getNamespace());
+            at.setText("text");
+            final Element ar = new Element("r", getNamespace());
+                ar.addContent(at);
+                return ar;
+            }
 
-        public static Element createApElement(final String text) {
-            final Element ap = new Element("p", getNamespace());
-            ap.addContent(createArElement(text));
-            return ap;
-        }
-        when(stylizer.stylize(anyString(), any(Element.class), any(Element.class))).thenReturn(stylized);
+            public static Element createApElement(final String text) {
+                final Element ap = new Element("p", getNamespace());
+                ap.addContent(createArElement(text));
+                return ap;
+            }
+            when(stylizer.stylize(anyString(), any(Element.class), any(Element.class))).thenReturn(stylized);
 
-        dom = postprocessor.process(null, dom, null, null, configuration);
+            dom = postprocessor.process(null, dom, null, null, configuration);
 
-        final String result = TestUtils.convertDocumentToText(dom);
+            final String result = TestUtils.convertDocumentToText(dom);
 
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
-                + "<p:sld xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" "
-                + "xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" "
-                + "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">"
-                + "<p:cSld><p:spTree><p:sp><p:txBody>"
-                + "<a:p><a:pPr indent=\"-285750\" marL=\"285750\"><a:buFont /><a:buChar /></a:pPr>"
-                + "<a:endParaRPr dirty=\"0\" lang=\"en-US\" smtClean=\"0\" /></a:p>"
-                + "<a:p><a:r><a:t>elem 1</a:t></a:r></a:p>"
-                + "<a:p><a:pPr indent=\"-285750\" marL=\"285750\" /><a:r><a:t>elem 2</a:t></a:r></a:p>"
-                + "<a:p><a:r><a:t>elem 3</a:t></a:r></a:p>"
-                + "<a:p><a:pPr indent=\"-285750\" marL=\"285750\"><a:buFont /><a:buChar /></a:pPr>"
-                + "<a:r><a:t>text 1</a:t></a:r></a:p>"
-                + "<a:p><a:r><a:t>text 2</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>\n", result);
-    }*/
+            assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                    + "<p:sld xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" "
+                    + "xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" "
+                    + "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">"
+                    + "<p:cSld><p:spTree><p:sp><p:txBody>"
+                    + "<a:p><a:pPr indent=\"-285750\" marL=\"285750\"><a:buFont /><a:buChar /></a:pPr>"
+                    + "<a:endParaRPr dirty=\"0\" lang=\"en-US\" smtClean=\"0\" /></a:p>"
+                    + "<a:p><a:r><a:t>elem 1</a:t></a:r></a:p>"
+                    + "<a:p><a:pPr indent=\"-285750\" marL=\"285750\" /><a:r><a:t>elem 2</a:t></a:r></a:p>"
+                    + "<a:p><a:r><a:t>elem 3</a:t></a:r></a:p>"
+                    + "<a:p><a:pPr indent=\"-285750\" marL=\"285750\"><a:buFont /><a:buChar /></a:pPr>"
+                    + "<a:r><a:t>text 1</a:t></a:r></a:p>"
+                    + "<a:p><a:r><a:t>text 2</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>\n", result);
+        }*/
 
     @Test
     public void testProcessNoApPrAndArPr() throws Exception {
@@ -172,13 +173,11 @@ public class StylePostprocessorTest {
                 + "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">"
                 + "<p:cSld><p:spTree><p:sp><p:txBody>"
                 + "<a:p><a:endParaRPr dirty=\"0\" lang=\"en-US\" smtClean=\"0\" /></a:p>"
-                + "<a:p><a:r><a:t>elem 1</a:t></a:r></a:p>" + "<a:p><a:r><a:t>elem 2</a:t></a:r></a:p>"
-                + "<a:p><a:r><a:t>elem 3</a:t></a:r></a:p>" + "<a:p><a:r><a:t>text 1</a:t></a:r></a:p>"
+                + "<a:p><a:r><a:t>elem 1</a:t></a:r></a:p>"
+                + "<a:p><a:pPr><a:buNone /></a:pPr><a:r><a:t>elem 2</a:t></a:r></a:p>"
+                + "<a:p><a:r><a:t>elem 3</a:t></a:r></a:p>"
+                + "<a:p><a:r><a:t>text 1</a:t></a:r></a:p>"
                 + "<a:p><a:r><a:t>text 2</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>\n", result);
-    }
-    
-    private static Namespace getNamespace() {
-        return Namespace.getNamespace("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
     }
 
 }

@@ -58,15 +58,15 @@ public class StylePostprocessor implements DomProcessor {
                 final Content content = at.getContent(0);
                 if (content instanceof Comment) {
                     final Comment comment = (Comment) content;
-                    processComment(comment, at, configuration);
+                    processComment(comment, at, slide, configuration);
                 }
             }
         }
         return document;
     }
 
-    private void processComment(final Comment comment, final Element at, final Configuration configuration)
-            throws JODTemplateException {
+    private void processComment(final Comment comment, final Element at, final Slide slide,
+            final Configuration configuration) throws JODTemplateException {
         String commentText = comment.getText();
         if (commentText.startsWith(STYLIZED_KEYWORD)) {
             commentText = StringUtils.removeStart(commentText, STYLIZED_KEYWORD);
@@ -85,7 +85,7 @@ public class StylePostprocessor implements DomProcessor {
             final Element sourceApPr = ObjectUtils.clone(apPr);
             cleanApPrElement(apPr);
 
-            final List<Element> stylizedElements = stylizer.stylize(text, arPr, apPr);
+            final List<Element> stylizedElements = stylizer.stylize(text, arPr, apPr, slide);
 
             ap.removeContent(ar);
             final List<Element> remains = getRemainingElements(arIndex, ap);
@@ -114,9 +114,13 @@ public class StylePostprocessor implements DomProcessor {
             } else {
                 if (createNewAp) {
                     currentAp = new Element(PPTXDocument.P_ELEMENT, getNamespace());
-                    if (apPr != null) {
-                        currentAp.addContent(ObjectUtils.clone(apPr));
+                    Element apPrToAdd = ObjectUtils.clone(apPr);
+                    if (apPrToAdd == null) {
+                        apPrToAdd = new Element(PPTXDocument.PPR_ELEMENT, getNamespace());
                     }
+                    final Element abuNone = new Element(PPTXDocument.BUNONE_ELEMENT, getNamespace());
+                    apPrToAdd.addContent(abuNone);
+                    currentAp.addContent(apPrToAdd);
                     txBody.addContent(apIndex, currentAp);
                     apIndex++;
                     createNewAp = false;

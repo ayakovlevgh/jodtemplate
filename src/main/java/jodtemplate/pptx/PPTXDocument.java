@@ -31,9 +31,13 @@ import jodtemplate.resource.Resources;
 
 public class PPTXDocument implements OOXMLDocument {
 
+    // CHECKSTYLE.OFF: MultipleStringLiterals
     public static final String DRAWINGML_NAMESPACE = "http://schemas.openxmlformats.org/drawingml/2006/main";
     public static final String DRAWINGML_NAMESPACE_PREFIX = "a";
     public static final String PRESENTATIONML_NAMESPACE = "http://schemas.openxmlformats.org/presentationml/2006/main";
+    public static final String RELATIONSHIPS_NAMESPACE =
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
+    public static final String RELATIONSHIPS_NAMESPACE_PREFIX = "r";
 
     public static final String R_ELEMENT = "r";
     public static final String BR_ELEMENT = "br";
@@ -55,6 +59,7 @@ public class PPTXDocument implements OOXMLDocument {
     public static final String BLIP_ELEMENT = "blip";
     public static final String EXT_ELEMENT = "ext";
     public static final String TR_ELEMENT = "tr";
+    public static final String HLINK_CLICK_ELEMENT = "hlinkClick";
 
     public static final String TYPE_ATTR = "type";
     public static final String CHAR_ATTR = "char";
@@ -67,6 +72,8 @@ public class PPTXDocument implements OOXMLDocument {
     public static final String MAR_L_ATTR = "marL";
     public static final String DESCR_ATTR = "descr";
     public static final String EMBED_ATTR = "embed";
+    public static final String ID_ATTR = "id";
+    // CHECKSTYLE.ON: MultipleStringLiterals
 
     private final OOXMLDocumentProcessor documentProcessor;
 

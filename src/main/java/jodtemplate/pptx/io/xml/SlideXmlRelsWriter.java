@@ -34,6 +34,7 @@ import jodtemplate.util.Utils;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.CharEncoding;
+import org.apache.commons.lang3.StringUtils;
 
 public class SlideXmlRelsWriter implements XmlWriter<Slide> {
 
@@ -59,6 +60,10 @@ public class SlideXmlRelsWriter implements XmlWriter<Slide> {
                         OOXMLDocument.TYPE_ATTRIBUTE, rel.getType());
                 writer.writeAttribute(OOXMLDocument.RELATIONSHIPS_RELS_NAMESPACE,
                         OOXMLDocument.TARGET_ATTRIBUTE, rel.getTarget());
+                if (StringUtils.isNotBlank(rel.getTargetMode())) {
+                    writer.writeAttribute(OOXMLDocument.RELATIONSHIPS_RELS_NAMESPACE,
+                            OOXMLDocument.TARGET_MODE_ATTRIBUTE, rel.getTargetMode());
+                }
                 writer.flush();
             }
             writer.writeEndElement();

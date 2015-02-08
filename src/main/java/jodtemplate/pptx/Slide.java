@@ -84,7 +84,7 @@ public class Slide {
             final String numStr = StringUtils.removeStart(rel.getId(), Relationship.ID_PREFIX);
             if (NumberUtils.isDigits(numStr)) {
                 final int num = Integer.parseInt(numStr);
-                if (num > id) {
+                if (num >= id) {
                     id = num + 1;
                 }
             }

@@ -54,7 +54,8 @@ public final class Example {
                 + "<li><em>Vivamus sit</em></li>"
                 + "</ul></li>"
                 + "<li>Pellentesque sed</li>"
-                + "</ol>"));
+                + "</ol>"
+                + "<a href=\"http://github.com\">Github</a>"));
         model.setImage(new FileImageField(new File("src/samples/resources/image.jpg")));
         final List<Item> items = Arrays.asList(new Item("value1", "value2", new Date()),
                 new Item("value3", "value4", new Date()), new Item("value5", "value6", new Date()));

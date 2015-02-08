@@ -72,6 +72,8 @@ public class SlideXmlRelsReader implements XmlReader<Slide> {
                 relationship.setTarget(xmlStreamReader.getAttributeValue(index));
             } else if (OOXMLDocument.TYPE_ATTRIBUTE.equals(attributeName) && StringUtils.isBlank(attributeNS)) {
                 relationship.setType(xmlStreamReader.getAttributeValue(index));
+            } else if (OOXMLDocument.TARGET_MODE_ATTRIBUTE.equals(attributeName) && StringUtils.isBlank(attributeNS)) {
+                relationship.setTargetMode(xmlStreamReader.getAttributeValue(index));
             }
         }
         return relationship;

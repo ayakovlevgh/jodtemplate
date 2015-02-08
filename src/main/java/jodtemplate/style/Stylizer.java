@@ -20,10 +20,11 @@ package jodtemplate.style;
 import java.util.List;
 
 import jodtemplate.exception.JODTemplateException;
+import jodtemplate.pptx.Slide;
 
 import org.jdom2.Element;
 
 public interface Stylizer {
 
-    List<Element> stylize(String text, Element arPr, Element apPr) throws JODTemplateException;
+    List<Element> stylize(String text, Element arPr, Element apPr, Slide slide) throws JODTemplateException;
 }

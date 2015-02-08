@@ -21,11 +21,16 @@ public class Relationship {
 
     public static final String SLIDE_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide";
     public static final String IMAGE_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image";
+    public static final String HYPERLINK_TYPE =
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink";
 
     public static final String ID_PREFIX = "rId";
 
+    public static final String EXTERNAL_TARGET_MODE = "External";
+
     private String id;
     private String target;
+    private String targetMode;
     private String type;
 
     public Relationship() {
@@ -52,6 +57,14 @@ public class Relationship {
 
     public void setTarget(final String target) {
         this.target = target;
+    }
+
+    public String getTargetMode() {
+        return targetMode;
+    }
+
+    public void setTargetMode(final String targetMode) {
+        this.targetMode = targetMode;
     }
 
     public String getType() {

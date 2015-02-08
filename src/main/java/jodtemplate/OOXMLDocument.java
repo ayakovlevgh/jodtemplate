@@ -41,6 +41,7 @@ public interface OOXMLDocument {
     String ID_ATTRIBUTE = "Id";
     String TYPE_ATTRIBUTE = "Type";
     String TARGET_ATTRIBUTE = "Target";
+    String TARGET_MODE_ATTRIBUTE = "TargetMode";
 
     void process(Map<String, Object> context, InputStream templateInputStream, OutputStream output)
             throws JODTemplateException;
