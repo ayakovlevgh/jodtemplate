@@ -37,11 +37,6 @@ import freemarker.template.TemplateExceptionHandler;
 
 public class FreemarkerTemplateEngine implements TemplateEngine {
 
-    private static final String INDEX_BEGIN = "[";
-    private static final String INDEX_END = "]";
-    private static final String VARIABLE_BEGIN = "${";
-    private static final String VARIABLE_END = "}";
-
     private static final String BEGIN_LIST_PATTERN = "[#if (%s)?has_content][#list %s as %s]";
     private static final String END_LIST_PATTERN = "[/#list][/#if]";
     private static final String VARIABLE_PATTERN = "[#if (%s)??]${%s%s}[#else]%s[/#if]";
@@ -90,26 +85,6 @@ public class FreemarkerTemplateEngine implements TemplateEngine {
             throw new JODTemplateException("Error while processing template " + templateName, e);
         }
 
-    }
-
-    @Override
-    public String getIndexBegin() {
-        return INDEX_BEGIN;
-    }
-
-    @Override
-    public String getIndexEnd() {
-        return INDEX_END;
-    }
-
-    @Override
-    public String getVariableBegin() {
-        return VARIABLE_BEGIN;
-    }
-
-    @Override
-    public String getVariableEnd() {
-        return VARIABLE_END;
     }
 
     @Override

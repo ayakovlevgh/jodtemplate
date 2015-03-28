@@ -36,14 +36,6 @@ public interface TemplateEngine {
     void process(String templateName, String templateString, Map<String, Object> context, Writer out)
             throws JODTemplateException;
 
-    String getIndexBegin();
-
-    String getIndexEnd();
-
-    String getVariableBegin();
-
-    String getVariableEnd();
-
     Locale getLocale();
 
     void setLocale(Locale locale);

@@ -22,11 +22,20 @@ import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import freemarker.template.Version;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 public class JODTemplateObjectWrapper extends DefaultObjectWrapper {
 
     public JODTemplateObjectWrapper(final Version incompatibleImprovements) {
         super(incompatibleImprovements);
+    }
+
+    @Override
+    public TemplateModel wrap(final Object obj) throws TemplateModelException {
+        if (obj instanceof String) {
+            return super.wrap(StringEscapeUtils.escapeXml10((String) obj));
+        }
+        return super.wrap(obj);
     }
 
     @Override
